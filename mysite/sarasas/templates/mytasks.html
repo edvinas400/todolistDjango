@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}My tasks{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>My tasks:</h2>
+{% if mytasks %}
+<ul>
+    {% for task in mytasks %}
+    <li class="{% if task.is_overdue %}text-danger{% endif %}">{{task}} ({{task.tbd}})
+    <div>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'updatetask' task.id%}">Update</a>
+    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'deletetask' task.id %}">Delete</a>
+</div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You have no tasks.</p>
+{% endif %}
+<div class="container">
+    <nav aria-label="...">
+        {% if page_obj.has_other_pages %}
+        <ul class="pagination pagination-sm">
+            {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}
